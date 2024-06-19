@@ -1,0 +1,44 @@
+{
+  "name": "dashgo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chakra-ui/core": "^0.8.0",
+    "@chakra-ui/next-js": "^2.2.0",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@hookform/resolvers": "^3.6.0",
+    "@tanstack/react-query": "^5.45.0",
+    "@tanstack/react-query-devtools": "^5.45.1",
+    "apexcharts": "^3.49.1",
+    "axios": "^1.7.2",
+    "framer-motion": "^11.2.6",
+    "install": "^0.13.0",
+    "next": "^14.2.4",
+    "react": "^18",
+    "react-apexcharts": "^1.4.1",
+    "react-dom": "^18",
+    "react-hook-form": "^7.51.5",
+    "react-icons": "^5.2.1",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@types/faker": "^6.6.9",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "faker": "^6.6.6",
+    "miragejs": "^0.2.0-alpha.1",
+    "typescript": "^5"
+  }
+}
