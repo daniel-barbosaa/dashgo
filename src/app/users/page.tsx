@@ -24,6 +24,8 @@ import { RiAddLine } from "react-icons/ri";
 import { useUsers } from "@/services/hooks/useUsers";
 import { makeServer } from "@/services/miraje";
 
+// Ultimo dia aprendi a fazer a logica de paginação no  mirage, coloquei um spinner de refetching...
+
 //Iniciando servidor mirage
 if(process.env.NODE_ENV === "development") {
   makeServer({ environment: "development" })
@@ -103,7 +105,7 @@ export default function UserList() {
                   })}
                 </Tbody>
               </Table>
-              <Pagination />
+              <Pagination totalCountOfRegisters={200} currentPage={5} onPageChange={() => {}}/>
             </>
           )}
         </Box>
