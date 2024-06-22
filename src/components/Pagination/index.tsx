@@ -9,6 +9,7 @@ interface PaginationProps {
 }
 
 const siblingsCount = 1
+generatePagesArray(2, 6)
 
 function generatePagesArray(from: number, to: number) {
   return [...new Array(to - from)].map((_, index) => {
@@ -22,7 +23,7 @@ export function Pagination(
   currentPage = 1, 
   onPageChange}: PaginationProps)
 {
-
+  // Dividindo as paginas, total de registros / registro por pagina(10)
   const lastPage = Math.floor(totalCountOfRegisters / registerPerPage)
 
   const previousPages = currentPage > 1 ? generatePagesArray(currentPage - 1 - siblingsCount, currentPage - 1) : []
@@ -47,7 +48,7 @@ export function Pagination(
 
         {currentPage > (1 + siblingsCount) && (
           <>
-            <PaginationItem number={1} />
+            <PaginationItem onChangePage={onPageChange} number={1} />
             {currentPage > (2 + siblingsCount) && (
               <Text color="gray.300" width="8" textAlign="center">...</Text>
               )}
@@ -56,14 +57,14 @@ export function Pagination(
         {/* Previous pages */}
         {previousPages.length > 0 && previousPages.map(page => {
           return (
-            <PaginationItem key={page} number={page} />
+            <PaginationItem onChangePage={onPageChange} key={page} number={page} />
           )
         })}
-        <PaginationItem number={currentPage} isCurent/>
+        <PaginationItem onChangePage={onPageChange} number={currentPage} isCurent/>
         {/* Next pages */}
         {nextPages.length > 0 && nextPages.map(page => {
           return (
-            <PaginationItem key={page} number={page} />
+            <PaginationItem onChangePage={onPageChange} key={page} number={page} />
           )
         })}
 
@@ -72,7 +73,7 @@ export function Pagination(
           {(currentPage + 1 + siblingsCount) < lastPage && (
             <Text color="gray.300" width="8" textAlign="center">...</Text>
           )}
-            <PaginationItem number={lastPage} />
+            <PaginationItem onChangePage={onPageChange} number={lastPage} />
           </>
         )}
       </Stack>

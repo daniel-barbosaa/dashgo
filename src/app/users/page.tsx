@@ -23,6 +23,7 @@ import Link from "next/link";
 import { RiAddLine } from "react-icons/ri";
 import { useUsers } from "@/services/hooks/useUsers";
 import { makeServer } from "@/services/miraje";
+import { useState } from "react";
 
 // Ultimo dia aprendi a fazer a logica de paginação no  mirage, coloquei um spinner de refetching...
 
@@ -32,8 +33,13 @@ if(process.env.NODE_ENV === "development") {
 }
 
 export default function UserList() {
+  const [page, setPage] = useState(1)
 
-  const { data, isLoading, isFetching, error } = useUsers()
+
+  console.log(page)
+
+  const { data, isLoading, isFetching, error } = useUsers(page)
+
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -85,7 +91,7 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data?.map(user => {
+                  {data?.users.map(user => {
                     return (
                         <Tr key={user.id}>
                         <Td px={["4", "4", "6"]}>
@@ -105,7 +111,7 @@ export default function UserList() {
                   })}
                 </Tbody>
               </Table>
-              <Pagination totalCountOfRegisters={200} currentPage={5} onPageChange={() => {}}/>
+              <Pagination totalCountOfRegisters={data?.totalCount || 0} currentPage={page} onPageChange={setPage}/>
             </>
           )}
         </Box>
