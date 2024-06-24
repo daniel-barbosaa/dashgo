@@ -18,33 +18,42 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
+  Link
 } from "@chakra-ui/react";
-import Link from "next/link";
+import LinkNext from "next/link";
 import { RiAddLine } from "react-icons/ri";
 import { useUsers } from "@/services/hooks/useUsers";
 import { makeServer } from "@/services/miraje";
 import { useState } from "react";
+import { queryClient } from "@/services/queryClient";
+import { api } from "@/services/api";
 
-// Ultimo dia aprendi a fazer a logica de paginação no  mirage, coloquei um spinner de refetching...
-
-//Iniciando servidor mirage
-if(process.env.NODE_ENV === "development") {
-  makeServer({ environment: "development" })
-}
+// if(process.env.NODE_ENV === "development") {
+//   makeServer({ environment: "development" })
+// }
 
 export default function UserList() {
   const [page, setPage] = useState(1)
 
-
-  console.log(page)
-
   const { data, isLoading, isFetching, error } = useUsers(page)
-
 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
+
+  async function handlePrefetchUser (userId: string) {
+    await queryClient.prefetchQuery({
+      queryKey: ['users', userId],
+      queryFn: async () => {
+        const response = await api.get(`users/${userId}`)
+
+        return response.data
+      },
+      staleTime: 1000 * 60 * 10 // 10 seconds of data persistence
+
+    })
+  }
 
   return (
     <Box>
@@ -57,7 +66,7 @@ export default function UserList() {
               Usuários
               {!isLoading && isFetching && <Spinner size="sm" color="gray.500" ml="4"/>}
             </Heading>
-            <Link href="/users/create" passHref>
+            <LinkNext href="/users/create" passHref>
               <Button
                 size="sm"
                 fontSize="sm"
@@ -66,7 +75,7 @@ export default function UserList() {
               >
                 Criar novo
               </Button>
-            </Link>
+            </LinkNext>
           </Flex>
           {isLoading ? (
             <Flex justify="center" >
@@ -99,7 +108,11 @@ export default function UserList() {
                         </Td>
                         <Td>
                           <Box>
-                            <Text fontWeight="bold">{user.name}</Text>
+                            <Link color="purple.400" onMouseEnter={() => {
+                              handlePrefetchUser(user.id)
+                            }}>
+                              <Text fontWeight="bold">{user.name}</Text>
+                            </Link>
                             <Text fontSize="sm" color="gray.300">
                                 {user.email}
                             </Text>

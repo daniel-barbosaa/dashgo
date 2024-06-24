@@ -18,8 +18,18 @@ import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RiSaveLine } from "react-icons/ri";
 import * as yup from "yup";
+import {useMutation} from '@tanstack/react-query'
+import { api } from "@/services/api";
+import { startMirage } from "@/services/startMirage";
+import { makeServer } from "@/services/miraje";
+import { queryClient } from "@/services/queryClient";
+import { useRouter } from "next/navigation";
 
+// startMirage()
 
+// // if(process.env.NODE_ENV === "development") {
+// //   makeServer({ environment: "development" })
+// // }
 
 type CreteUserFormData = {
   name: string;
@@ -41,6 +51,27 @@ const CreateUserDataSchema = yup.object({
 });
 
 export default function CreateUser() {
+  const router = useRouter()
+
+
+  const mutationKey = ['users']
+  const createUser = useMutation({
+    mutationKey,
+    mutationFn: async (user: CreteUserFormData) => {
+      return await api.post('/users', {
+        user: {
+          ...user,
+          created_at: new Date()
+        }
+      })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['users'],
+      })
+    }
+  })
+
   const {
     register,
     handleSubmit,
@@ -50,8 +81,9 @@ export default function CreateUser() {
   });
 
   const handCreateUser: SubmitHandler<CreteUserFormData> = async (data) => {
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    console.log(data);
+    await createUser.mutateAsync(data)
+
+    router.push('/users')
   };
 
   return (
@@ -102,7 +134,7 @@ export default function CreateUser() {
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
               <Link href="/users">
-                <Button as="a" colorScheme="whiteAlpha">
+                <Button colorScheme="whiteAlpha">
                   Cancelar
                 </Button>
               </Link>

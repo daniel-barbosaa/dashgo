@@ -3,9 +3,11 @@ import { ChakraProvider } from '@chakra-ui/react'
 import theme from '../styles/theme'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { queryClient } from '@/services/queryClient';
+import StartMirage from '@/components/StartMirage';
 
 
-const queryClient = new QueryClient()
+
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -14,6 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         theme={theme}>{children}
       </ChakraProvider>
       <ReactQueryDevtools/>
+      <StartMirage/>
   </QueryClientProvider>
 )
 }
